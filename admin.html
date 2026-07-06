@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – Panel de Gestión | Lago Rapel Llallauquen</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="admin-page">
+
+  <!-- ═══ LOGIN ═══ -->
+  <div id="loginSection" class="admin-login" style="display:flex">
+    <div class="login-card">
+      <div class="login-logo">🏡</div>
+      <h1 class="login-title">Panel Admin</h1>
+      <p class="login-subtitle">Lago Rapel · Casas Llallauquen</p>
+
+      <div id="loginError" class="login-error"></div>
+
+      <form id="loginForm">
+        <div class="admin-form-group">
+          <label>Usuario</label>
+          <input type="text" id="loginUser" placeholder="admin" autocomplete="username">
+        </div>
+        <div class="admin-form-group" style="margin-bottom:20px">
+          <label>Contraseña</label>
+          <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Ingresar →</button>
+      </form>
+
+      <p style="margin-top:20px;font-size:0.78rem;color:rgba(255,255,255,0.3);text-align:center">
+        Acceso restringido solo para administradores
+      </p>
+      <a href="index.html" style="display:block;text-align:center;margin-top:12px;font-size:0.82rem;color:rgba(255,255,255,0.4);">
+        ← Volver al sitio
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══ ADMIN APP ═══ -->
+  <div id="adminApp" class="admin-layout" style="display:none">
+
+    <!-- ─── SIDEBAR ─── -->
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-logo">
+        🏡 Lago Rapel
+        <small>⚙️ Panel de Administración</small>
+      </div>
+
+      <nav>
+        <div class="admin-nav-item active" data-panel="panelDashboard">
+          <span class="nav-icon">📊</span> Dashboard
+        </div>
+        <div class="admin-nav-item" data-panel="panelReservations">
+          <span class="nav-icon">📋</span> Reservas
+        </div>
+        <div class="admin-nav-item" data-panel="panelBlock">
+          <span class="nav-icon">🚫</span> Bloquear Fechas
+        </div>
+        <div class="admin-nav-item" data-panel="panelSeasons">
+          <span class="nav-icon">📅</span> Temporadas
+        </div>
+        <div class="admin-nav-item" data-panel="panelEdit">
+          <span class="nav-icon">✏️</span> Editar Casas
+        </div>
+        <div class="admin-nav-item" data-panel="panelInfo">
+          <span class="nav-icon">ℹ️</span> Información
+        </div>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <a href="index.html" style="display:block;color:rgba(255,255,255,0.5);font-size:0.82rem;margin-bottom:12px;">
+          ← Ver sitio web
+        </a>
+        <div id="logoutBtn" class="admin-logout">
+          <span>🚪</span> Cerrar sesión
+        </div>
+      </div>
+    </aside>
+
+    <!-- ─── CONTENT ─── -->
+    <div class="admin-content">
+
+      <!-- ══ DASHBOARD ══ -->
+      <div id="panelDashboard" class="admin-panel active">
+        <div class="admin-page-title">📊 Dashboard</div>
+        <div class="admin-page-subtitle">Resumen general de las dos casas</div>
+
+        <div class="admin-stats-grid">
+          <div class="admin-stat-card blue">
+            <div class="stat-label">Total Reservas</div>
+            <div class="stat-value" id="stat-total">0</div>
+          </div>
+          <div class="admin-stat-card green">
+            <div class="stat-label">Reservas Activas</div>
+            <div class="stat-value" id="stat-active">0</div>
+          </div>
+          <div class="admin-stat-card blue">
+            <div class="stat-label">Llallauquen 1</div>
+            <div class="stat-value" id="stat-casa1">0</div>
+          </div>
+          <div class="admin-stat-card green">
+            <div class="stat-label">Llallauquen 2</div>
+            <div class="stat-value" id="stat-casa2">0</div>
+          </div>
+          <div class="admin-stat-card gold">
+            <div class="stat-label">Ingresos Estimados</div>
+            <div class="stat-value" id="stat-revenue" style="font-size:1.2rem">$0</div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-title">📆 Próximas Reservas</div>
+          <div style="overflow-x:auto">
+            <table class="reservation-table">
+              <thead>
+                <tr>
+                  <th>Casa</th>
+                  <th>Nombre</th>
+                  <th>Fechas</th>
+                  <th>Personas</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody id="upcomingBody">
+                <tr><td colspan="5" class="empty-state">Sin reservas próximas</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Links rápidos -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px">
+          <a href="casa1.html" target="_blank" style="display:block;background:#1e293b;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:18px;color:#fff;text-decoration:none;transition:background 0.2s" onmouseover="this.style.background='#273549'" onmouseout="this.style.background='#1e293b'">
+            <div style="font-size:1.3rem;margin-bottom:6px">🏠</div>
+            <strong>Llallauquen 1</strong>
+            <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:4px">Ver página pública →</div>
+          </a>
+          <a href="casa2.html" target="_blank" style="display:block;background:#1e293b;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:18px;color:#fff;text-decoration:none;transition:background 0.2s" onmouseover="this.style.background='#273549'" onmouseout="this.style.background='#1e293b'">
+            <div style="font-size:1.3rem;margin-bottom:6px">🏡</div>
+            <strong>Llallauquen 2</strong>
+            <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:4px">Ver página pública →</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ RESERVAS ══ -->
+      <div id="panelReservations" class="admin-panel">
+        <div class="admin-page-title">📋 Reservas</div>
+        <div class="admin-page-subtitle">Todas las consultas y reservas registradas</div>
+
+        <div class="admin-card" style="margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <label style="color:rgba(255,255,255,0.6);font-size:0.82rem;font-weight:600;text-transform:uppercase;">Filtrar:</label>
+            <select id="resFilter" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);color:#fff;border-radius:8px;padding:7px 12px;font:inherit;font-size:0.88rem;cursor:pointer">
+              <option value="all">Todas las casas</option>
+              <option value="1">Solo Llallauquen 1</option>
+              <option value="2">Solo Llallauquen 2</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Casa 1 -->
+        <div id="resTable1Wrap">
+          <div class="admin-card">
+            <div class="admin-card-title"><span class="res-badge house1">Llallauquen 1</span> Reservas</div>
+            <div style="overflow-x:auto">
+              <table class="reservation-table">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Check-in</th>
+                    <th>Check-out</th>
+                    <th>Personas</th>
+                    <th>Temporada</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="resBody1">
+                  <tr><td colspan="8" class="empty-state">Sin reservas</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Casa 2 -->
+        <div id="resTable2Wrap">
+          <div class="admin-card">
+            <div class="admin-card-title"><span class="res-badge house2">Llallauquen 2</span> Reservas</div>
+            <div style="overflow-x:auto">
+              <table class="reservation-table">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Check-in</th>
+                    <th>Check-out</th>
+                    <th>Personas</th>
+                    <th>Temporada</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="resBody2">
+                  <tr><td colspan="8" class="empty-state">Sin reservas</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ BLOQUEAR FECHAS ══ -->
+      <div id="panelBlock" class="admin-panel">
+        <div class="admin-page-title">🚫 Bloquear Fechas</div>
+        <div class="admin-page-subtitle">Bloquea rangos de fechas (mantención, uso personal, etc.) para que no aparezcan como disponibles.</div>
+
+        <div class="admin-card" style="max-width:500px">
+          <div class="admin-card-title">➕ Nuevo Bloqueo</div>
+          <form id="blockForm">
+            <div class="admin-form-group">
+              <label>Casa</label>
+              <select id="blockHouse">
+                <option value="1">Llallauquen 1</option>
+                <option value="2">Llallauquen 2</option>
+              </select>
+            </div>
+            <div class="admin-form-row">
+              <div class="admin-form-group">
+                <label>Fecha inicio</label>
+                <input type="date" id="blockStart">
+              </div>
+              <div class="admin-form-group">
+                <label>Fecha fin</label>
+                <input type="date" id="blockEnd">
+              </div>
+            </div>
+            <div class="admin-form-group">
+              <label>Motivo (opcional)</label>
+              <input type="text" id="blockReason" placeholder="ej: Uso personal, Mantención...">
+            </div>
+            <button type="submit" class="btn btn-gold btn-full">🚫 Bloquear Fechas</button>
+          </form>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-title">🏠 Bloqueados – Llallauquen 1</div>
+          <div id="blockedList1"><div class="empty-state">Sin fechas bloqueadas</div></div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-title">🏡 Bloqueados – Llallauquen 2</div>
+          <div id="blockedList2"><div class="empty-state">Sin fechas bloqueadas</div></div>
+        </div>
+      </div>
+
+      <!-- ══ TEMPORADAS ══ -->
+      <div id="panelSeasons" class="admin-panel">
+        <div class="admin-page-title">📅 Temporadas</div>
+        <div class="admin-page-subtitle">Configura las fechas de Semana Santa para cada año (las otras temporadas son automáticas).</div>
+
+        <!-- Reglas automáticas -->
+        <div class="admin-card">
+          <div class="admin-card-title">✅ Temporadas Automáticas (fijas)</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.2);border-radius:10px;">
+              <span>🔴</span>
+              <div>
+                <strong style="color:#fca5a5;font-size:0.9rem">Diciembre, Enero y Febrero</strong>
+                <div style="font-size:0.8rem;color:rgba(255,255,255,0.5)">Todo el verano chileno — configurado automáticamente</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.2);border-radius:10px;">
+              <span>🇨🇱</span>
+              <div>
+                <strong style="color:#fca5a5;font-size:0.9rem">Semana 18 de Septiembre (14-22 Sep)</strong>
+                <div style="font-size:0.8rem;color:rgba(255,255,255,0.5)">Fiestas Patrias — configurado automáticamente cada año</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Semana Santa configurable -->
+        <div class="admin-card" style="max-width:500px">
+          <div class="admin-card-title">✝️ Configurar Semana Santa por Año</div>
+          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-bottom:16px">
+            La Semana Santa cambia cada año. Ingresa las fechas para que el calendario las marque en rojo automáticamente.
+          </div>
+          <form id="santaForm">
+            <div class="admin-form-group">
+              <label>Año</label>
+              <input type="number" id="santaYear" placeholder="ej: 2026" min="2024" max="2035">
+            </div>
+            <div class="admin-form-row">
+              <div class="admin-form-group">
+                <label>Inicio (Jueves Santo)</label>
+                <input type="date" id="santaStart">
+              </div>
+              <div class="admin-form-group">
+                <label>Fin (Domingo Pascua)</label>
+                <input type="date" id="santaEnd">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">💾 Guardar Semana Santa</button>
+          </form>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-title">✝️ Semanas Santas Configuradas</div>
+          <div id="santaList"><div class="empty-state">No hay Semanas Santas configuradas</div></div>
+        </div>
+
+        <!-- Referencia Semana Santa -->
+        <div class="admin-card">
+          <div class="admin-card-title">📖 Referencia – Fechas Semana Santa</div>
+          <table class="reservation-table">
+            <thead><tr><th>Año</th><th>Jueves Santo</th><th>Viernes Santo</th><th>Domingo Pascua</th></tr></thead>
+            <tbody>
+              <tr><td>2025</td><td>17 Abril</td><td>18 Abril</td><td>20 Abril</td></tr>
+              <tr><td>2026</td><td>2 Abril</td><td>3 Abril</td><td>5 Abril</td></tr>
+              <tr><td>2027</td><td>25 Marzo</td><td>26 Marzo</td><td>28 Marzo</td></tr>
+              <tr><td>2028</td><td>13 Abril</td><td>14 Abril</td><td>16 Abril</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Calendario Visual de Temporadas -->
+        <div class="admin-card">
+          <div class="admin-card-title">🗓️ Personalizar Fechas Manualmente</div>
+          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-bottom:16px;line-height:1.5">
+            Haz clic en cualquier día para marcarlo como Temporada Alta o Baja manualmente. Los ajustes manuales tienen prioridad sobre las reglas automáticas.
+            Los días con borde grueso son ajustes manuales; con borde delgado son automáticos.
+          </div>
+          <div id="adminSeasonCalContainer"></div>
+          <button id="clearOverridesBtn" class="btn btn-sm" style="margin-top:18px;background:rgba(220,38,38,0.15);color:#fca5a5;border:1px solid rgba(220,38,38,0.3);">
+            🗑️ Limpiar todos los ajustes manuales
+          </button>
+        </div>
+      </div>
+
+
+      <!-- ══ EDITAR CASAS ══ -->
+      <div id="panelEdit" class="admin-panel">
+        <div class="admin-page-title">✏️ Editar Casas</div>
+        <div class="admin-page-subtitle">Modifica imágenes, descripciones y dirección de cada propiedad. Los cambios se aplican inmediatamente en el sitio.</div>
+
+        <!-- ─── CASA 1 ─── -->
+        <div class="admin-card">
+          <div class="admin-card-title">🏠 Llallauquen 1</div>
+
+          <div style="display:grid;grid-template-columns:200px 1fr;gap:24px;align-items:start">
+            <!-- Preview imagen -->
+            <div>
+              <div style="font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Imagen actual</div>
+              <img id="previewImg1" src="../assets/img/casa1_exterior.png" alt="Casa 1"
+                style="width:200px;height:130px;object-fit:cover;border-radius:10px;border:2px solid rgba(255,255,255,0.1);">
+              <label for="imgInput1" style="display:block;margin-top:10px;cursor:pointer;">
+                <span style="display:block;text-align:center;background:var(--lake-mid);color:#fff;padding:9px 0;border-radius:8px;font-size:0.85rem;font-weight:600;transition:background .2s"
+                  onmouseover="this.style.background='var(--lake-deep)'" onmouseout="this.style.background='var(--lake-mid)'">
+                  📷 Subir nueva imagen
+                </span>
+              </label>
+              <input type="file" id="imgInput1" accept="image/*" style="display:none">
+            </div>
+
+            <!-- Campos editables -->
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="admin-form-group" style="margin:0">
+                <label>Descripción</label>
+                <textarea id="descInput1" rows="5" style="width:100%;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 14px;font:inherit;font-size:0.88rem;color:#fff;resize:vertical;outline:none;"></textarea>
+              </div>
+              <div class="admin-form-group" style="margin:0">
+                <label>Dirección</label>
+                <input type="text" id="addrInput1" placeholder="Llallauquen Nº1, Lago Rapel, VI Región, Chile">
+              </div>
+              <button class="btn btn-primary btn-sm" id="saveEdit1">💾 Guardar cambios Casa 1</button>
+              <button class="btn btn-sm" id="resetEdit1" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1)">↺ Restaurar valores originales</button>
+
+              <!-- Gallery -->
+              <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:14px;margin-top:4px">
+                <div style="font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">📷 Galería de Fotos</div>
+                <div class="admin-gallery-grid" id="galleryPreview1"></div>
+                <label for="galleryInput1" style="cursor:pointer;display:inline-block">
+                  <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:7px 14px;font-size:0.82rem;transition:background .2s;"
+                    onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
+                    ➕ Agregar fotos a la galería
+                  </span>
+                </label>
+                <input type="file" id="galleryInput1" accept="image/*" multiple style="display:none">
+                <div style="font-size:0.72rem;color:rgba(255,255,255,0.3);margin-top:6px">Puedes seleccionar varias fotos a la vez. Máx. 8MB por foto.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── CASA 2 ─── -->
+        <div class="admin-card">
+          <div class="admin-card-title">🏡 Llallauquen 2</div>
+
+          <div style="display:grid;grid-template-columns:200px 1fr;gap:24px;align-items:start">
+            <!-- Preview imagen -->
+            <div>
+              <div style="font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Imagen actual</div>
+              <img id="previewImg2" src="../assets/img/casa2_exterior.png" alt="Casa 2"
+                style="width:200px;height:130px;object-fit:cover;border-radius:10px;border:2px solid rgba(255,255,255,0.1);">
+              <label for="imgInput2" style="display:block;margin-top:10px;cursor:pointer;">
+                <span style="display:block;text-align:center;background:var(--forest);color:#fff;padding:9px 0;border-radius:8px;font-size:0.85rem;font-weight:600;transition:background .2s"
+                  onmouseover="this.style.background='#1e3d29'" onmouseout="this.style.background='var(--forest)'">
+                  📷 Subir nueva imagen
+                </span>
+              </label>
+              <input type="file" id="imgInput2" accept="image/*" style="display:none">
+            </div>
+
+            <!-- Campos editables -->
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="admin-form-group" style="margin:0">
+                <label>Descripción</label>
+                <textarea id="descInput2" rows="5" style="width:100%;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 14px;font:inherit;font-size:0.88rem;color:#fff;resize:vertical;outline:none;"></textarea>
+              </div>
+              <div class="admin-form-group" style="margin:0">
+                <label>Dirección</label>
+                <input type="text" id="addrInput2" placeholder="Llallauquen Nº2, Lago Rapel, VI Región, Chile">
+              </div>
+              <button class="btn btn-forest btn-sm" id="saveEdit2">💾 Guardar cambios Casa 2</button>
+              <button class="btn btn-sm" id="resetEdit2" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1)">↺ Restaurar valores originales</button>
+
+              <!-- Gallery -->
+              <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:14px;margin-top:4px">
+                <div style="font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">📷 Galería de Fotos</div>
+                <div class="admin-gallery-grid" id="galleryPreview2"></div>
+                <label for="galleryInput2" style="cursor:pointer;display:inline-block">
+                  <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(74,140,96,0.2);color:#86efac;border:1px solid rgba(74,140,96,0.3);border-radius:8px;padding:7px 14px;font-size:0.82rem;transition:background .2s;"
+                    onmouseover="this.style.background='rgba(74,140,96,0.35)'" onmouseout="this.style.background='rgba(74,140,96,0.2)'">
+                    ➕ Agregar fotos a la galería
+                  </span>
+                </label>
+                <input type="file" id="galleryInput2" accept="image/*" multiple style="display:none">
+                <div style="font-size:0.72rem;color:rgba(255,255,255,0.3);margin-top:6px">Puedes seleccionar varias fotos a la vez. Máx. 8MB por foto.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px;font-size:0.82rem;color:rgba(255,255,255,0.4);margin-top:4px">
+          ℹ️ Los cambios se guardan automáticamente en el navegador (localStorage). Las imágenes subidas se guardan como base64.
+          Si cambias de navegador o limpias el caché, se mostrarán las imágenes originales.
+        </div>
+      </div>
+
+      <!-- ══ INFORMACIÓN ══ -->
+      <div id="panelInfo" class="admin-panel">
+        <div class="admin-page-title">ℹ️ Información del Sistema</div>
+        <div class="admin-page-subtitle">Configuración actual y datos de referencia.</div>
+
+        <div class="admin-card">
+          <div class="admin-card-title">💰 Precios Actuales</div>
+          <table class="reservation-table">
+            <thead><tr><th>Temporada</th><th>Precio Base/noche</th><th>Extra persona</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="res-badge high">🔴 Alta</span></td>
+                <td style="color:#86efac;font-weight:700">$100.000</td>
+                <td>+$10.000/persona extra</td>
+              </tr>
+              <tr>
+                <td><span class="res-badge low">🟢 Baja</span></td>
+                <td style="color:#86efac;font-weight:700">$70.000</td>
+                <td>+$5.000/persona extra</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size:0.8rem;color:rgba(255,255,255,0.4);margin-top:12px">⚠️ Para cambiar precios, debes editar el archivo <code>js/config.js</code>.</p>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-title">🏠 Casas</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div style="background:rgba(26,107,154,0.1);border:1px solid rgba(26,107,154,0.3);border-radius:10px;padding:16px">
+              <strong style="color:var(--lake-light)">Llallauquen 1</strong>
+              <p style="color:rgba(255,255,255,0.6);font-size:0.82rem;margin-top:4px">Llallauquen Nº1, Lago Rapel</p>
+              <p style="color:rgba(255,255,255,0.5);font-size:0.8rem">Estilo: Rústico · Máx. 8 personas</p>
+            </div>
+            <div style="background:rgba(45,90,61,0.15);border:1px solid rgba(74,140,96,0.3);border-radius:10px;padding:16px">
+              <strong style="color:#86efac">Llallauquen 2</strong>
+              <p style="color:rgba(255,255,255,0.6);font-size:0.82rem;margin-top:4px">Llallauquen Nº2, Lago Rapel</p>
+              <p style="color:rgba(255,255,255,0.5);font-size:0.8rem">Estilo: Moderno · Máx. 8 personas</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-title">🔑 Credenciales Admin</div>
+          <p style="font-size:0.88rem;color:rgba(255,255,255,0.6)">
+            Usuario: <code style="color:var(--lake-light)">admin</code><br>
+            Contraseña: <code style="color:var(--lake-light)">rapel2025</code><br><br>
+            Para cambiar la contraseña, edita <code>js/config.js</code> → <code>CONFIG.admin</code>
+          </p>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-title">📞 Contacto Configurado</div>
+          <p style="font-size:0.88rem;color:rgba(255,255,255,0.6)">
+            WhatsApp: <code style="color:var(--lake-light)">56900000000</code><br>
+            Email: <code style="color:var(--lake-light)">contacto@lagorapel.cl</code><br><br>
+            Para actualizar, edita <code>js/config.js</code> → <code>CONFIG.contact</code>
+          </p>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-title">⚠️ Notas Técnicas</div>
+          <ul style="color:rgba(255,255,255,0.6);font-size:0.85rem;padding-left:16px;list-style:disc;line-height:2">
+            <li>Los datos se almacenan en <strong>localStorage del navegador</strong></li>
+            <li>Los datos se pierden si limpias el caché del navegador</li>
+            <li>El sitio no tiene backend ni base de datos propia</li>
+            <li>Las reservas son <strong>consultas</strong>, no pagos reales</li>
+            <li>Para producción se recomienda añadir un backend real</li>
+          </ul>
+        </div>
+      </div>
+
+    </div><!-- /admin-content -->
+  </div><!-- /admin-layout -->
+
+  <script src="js/storage.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "lago-rapel-casas",
+  "version": "1.0.0",
+  "description": "Casas en arriendo Santa Eliana 294 y 353, Llallauquén, Lago Rapel",
+  "scripts": {
+    "start": "npx serve . -l $PORT",
+    "dev": "npx serve . -l 3456"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "serve": "^14.2.4"
+  }
+}
