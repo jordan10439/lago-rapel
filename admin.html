@@ -53,8 +53,12 @@
         <div class="admin-nav-item active" data-panel="panelDashboard">
           <span class="nav-icon">📊</span> Dashboard
         </div>
+        <div class="admin-nav-item" data-panel="panelSolicitudes" id="navSolicitudes">
+          <span class="nav-icon">🔔</span> Solicitudes
+          <span id="solicitudesBadge" style="display:none;background:#dc2626;color:#fff;font-size:0.65rem;font-weight:700;border-radius:999px;padding:1px 7px;margin-left:auto;"></span>
+        </div>
         <div class="admin-nav-item" data-panel="panelReservations">
-          <span class="nav-icon">📋</span> Reservas
+          <span class="nav-icon">📋</span> Reservas Confirmadas
         </div>
         <div class="admin-nav-item" data-panel="panelBlock">
           <span class="nav-icon">🚫</span> Bloquear Fechas
@@ -146,10 +150,26 @@
         </div>
       </div>
 
-      <!-- ══ RESERVAS ══ -->
+      <!-- ══ SOLICITUDES DE RESERVA ══ -->
+      <div id="panelSolicitudes" class="admin-panel">
+        <div class="admin-page-title">🔔 Solicitudes de Reserva</div>
+        <div class="admin-page-subtitle">Solicitudes enviadas por WhatsApp. Acéptalas para bloquear las fechas. Recházalas para mantenerlas disponibles.</div>
+
+        <!-- Filtros -->
+        <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+          <button onclick="filterSolicitudes('all')"     id="fBtn_all"     class="btn btn-sm" style="background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.2)">Todas</button>
+          <button onclick="filterSolicitudes('pending')" id="fBtn_pending" class="btn btn-sm" style="background:rgba(234,179,8,0.2);color:#fde047;border:1px solid rgba(234,179,8,0.3)">⏳ Pendientes</button>
+          <button onclick="filterSolicitudes('accepted')" id="fBtn_accepted" class="btn btn-sm" style="background:rgba(22,163,74,0.2);color:#86efac;border:1px solid rgba(22,163,74,0.3)">✅ Aceptadas</button>
+          <button onclick="filterSolicitudes('rejected')" id="fBtn_rejected" class="btn btn-sm" style="background:rgba(220,38,38,0.15);color:#fca5a5;border:1px solid rgba(220,38,38,0.3)">❌ Rechazadas</button>
+        </div>
+
+        <div id="solicitudesList"></div>
+      </div>
+
+      <!-- ══ RESERVAS CONFIRMADAS ══ -->
       <div id="panelReservations" class="admin-panel">
-        <div class="admin-page-title">📋 Reservas</div>
-        <div class="admin-page-subtitle">Todas las consultas y reservas registradas</div>
+        <div class="admin-page-title">📋 Reservas Confirmadas</div>
+        <div class="admin-page-subtitle">Fechas bloqueadas (solicitudes aceptadas). Para desbloquear, elimina el bloqueo en "Bloquear Fechas".</div>
 
         <div class="admin-card" style="margin-bottom:16px">
           <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">

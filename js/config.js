@@ -11,7 +11,7 @@ const CONFIG = {
       name: "Santa Eliana 294",
       slug: "casa1",
       address: "Santa Eliana 294, Llallauquén, Lago Rapel",
-      mapUrl: "https://maps.google.com/maps?q=Santa+Eliana+294+Llallauquen+Chile&output=embed&z=15",
+      mapUrl: "https://maps.google.com/maps?q=https://maps.app.goo.gl/ZRKbMKAkWGutcPvq6&output=embed&z=16",
       img: "assets/img/casa1_exterior.png",
       description: "Acogedora casa en madera y piedra nativa, ubicada en Santa Eliana 294, Llallauquén. Propiedad independiente con terreno propio, 2 baños completos, piscina privada y acceso directo al Lago Rapel. Rodeada de vegetación nativa y amplio jardín.",
       amenities: [
@@ -32,20 +32,20 @@ const CONFIG = {
       name: "Santa Eliana 353",
       slug: "casa2",
       address: "Santa Eliana 353, Llallauquén, Lago Rapel",
-      mapUrl: "https://maps.google.com/maps?q=Santa+Eliana+353+Llallauquen+Chile&output=embed&z=15",
+      mapUrl: "https://maps.google.com/maps?q=https://maps.app.goo.gl/AcaYcqvj52dAUehs5&output=embed&z=16",
       img: "assets/img/casa2_exterior.png",
-      description: "Casa con amplios ventanales y deck de madera, ubicada en Santa Eliana 353, Llallauquén. Propiedad independiente con terreno propio, 1 baño, piscina privada y el Lago Rapel directamente al frente. Perfecta para quienes desean disfrutar de las vistas al lago.",
+      description: "Casa nueva y totalmente renovada, ubicada en Santa Eliana 353, Llallauquén. El terreno alberga 2 casas independientes que funcionan como cabañas: cada una tiene su propio quincho, espacios privados y acceso independiente. Solo se comparte la piscina y algunos espacios comunes del terreno. El lago Rapel está directamente al frente. Ideal para grupos o familias que buscan privacidad con todo el confort.",
       amenities: [
-        { icon: "🛏️", text: "Dormitorios amplios" },
+        { icon: "🛏️", text: "Dormitorios cómodos" },
         { icon: "🚿", text: "1 Baño completo" },
         { icon: "🍳", text: "Cocina equipada" },
-        { icon: "🏊", text: "Piscina privada" },
+        { icon: "🏐", text: "Piscina compartida del terreno" },
         { icon: "🌊", text: "Lago al frente" },
-        { icon: "🪵", text: "Deck exterior" },
+        { icon: "🔥", text: "Quincho propio privado" },
+        { icon: "🏡", text: "2 cabañas independientes en el terreno" },
         { icon: "📶", text: "WiFi" },
-        { icon: "🌿", text: "Jardín y terraza" },
-        { icon: "🅿️", text: "Estacionamiento" },
-        { icon: "🏡", text: "Terreno independiente" }
+        { icon: "🌿", text: "Espacios comunes del terreno" },
+        { icon: "🅿️", text: "Estacionamiento" }
       ]
     }
   },

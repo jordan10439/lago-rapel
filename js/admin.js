@@ -46,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loginSection.style.display = "none";
     adminApp.style.display = "grid";
     loadDashboard();
+    loadSolicitudesPanel();
     loadReservationsPanel();
     loadBlockDatesPanel();
     loadSeasonPanel();
@@ -495,6 +496,127 @@ document.addEventListener("DOMContentLoaded", () => {
     StorageManager.removeGalleryImage(houseId, imgId);
     renderGalleryAdmin(houseId);
     showAdminToast("Foto eliminada", "success");
+  };
+
+  // ── Solicitudes de Reserva ─────────────────────────────
+  let currentFilter = "all";
+
+  function loadSolicitudesPanel() {
+    renderSolicitudes();
+    updateSolicitudesBadge();
+  }
+
+  function updateSolicitudesBadge() {
+    const pending = StorageManager.getAllRequests().filter(r => r.status === "pending");
+    const badge   = document.getElementById("solicitudesBadge");
+    if (!badge) return;
+    if (pending.length > 0) {
+      badge.textContent = pending.length;
+      badge.style.display = "inline-block";
+    } else {
+      badge.style.display = "none";
+    }
+  }
+
+  window.filterSolicitudes = function(status) {
+    currentFilter = status;
+    renderSolicitudes();
+  };
+
+  function renderSolicitudes() {
+    const container = document.getElementById("solicitudesList");
+    if (!container) return;
+
+    let list = StorageManager.getAllRequests();
+    if (currentFilter !== "all") {
+      list = list.filter(r => r.status === currentFilter);
+    }
+    // Más recientes primero
+    list = list.slice().reverse();
+
+    if (!list.length) {
+      const labels = { all: "No hay solicitudes aún.", pending: "No hay solicitudes pendientes.", accepted: "No hay solicitudes aceptadas.", rejected: "No hay solicitudes rechazadas." };
+      container.innerHTML = `<div style="color:rgba(255,255,255,0.5);text-align:center;padding:40px;">${labels[currentFilter] || "Sin resultados."}</div>`;
+      return;
+    }
+
+    const HOUSE_NAMES = { 1: "Santa Eliana 294", 2: "Santa Eliana 353" };
+    const STATUS_LABELS = {
+      pending:  { label: "⏳ Pendiente",  color: "#fde047", bg: "rgba(234,179,8,0.15)"  },
+      accepted: { label: "✅ Aceptada",   color: "#86efac", bg: "rgba(22,163,74,0.15)"  },
+      rejected: { label: "❌ Rechazada",  color: "#fca5a5", bg: "rgba(220,38,38,0.12)"  }
+    };
+
+    container.innerHTML = list.map(req => {
+      const st  = STATUS_LABELS[req.status] || STATUS_LABELS.pending;
+      const dt  = new Date(req.createdAt);
+      const dtStr = `${dt.toLocaleDateString("es-CL")} ${dt.toLocaleTimeString("es-CL", {hour:"2-digit",minute:"2-digit"})}`;
+      const nights = req.nights || Math.round((new Date(req.checkOut) - new Date(req.checkIn)) / 86400000);
+      const total  = (req.totalPrice || 0).toLocaleString("es-CL");
+
+      const actionBtns = req.status === "pending" ? `
+        <div style="display:flex;gap:10px;margin-top:16px;">
+          <button onclick="acceptSolicitud(${req.id})"
+            style="flex:1;background:#16a34a;color:#fff;border:none;border-radius:8px;padding:10px 0;font-weight:700;cursor:pointer;font-size:0.9rem;">
+            ✅ Aceptar – Bloquear Fechas
+          </button>
+          <button onclick="rejectSolicitud(${req.id})"
+            style="flex:1;background:#dc2626;color:#fff;border:none;border-radius:8px;padding:10px 0;font-weight:700;cursor:pointer;font-size:0.9rem;">
+            ❌ Rechazar
+          </button>
+        </div>` : `
+        <div style="margin-top:12px;display:flex;justify-content:flex-end;">
+          <button onclick="deleteSolicitud(${req.id})"
+            style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:6px 14px;cursor:pointer;font-size:0.78rem;">
+            🗑 Eliminar del historial
+          </button>
+        </div>`;
+
+      return `
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:20px;margin-bottom:16px;">
+          <!-- Header -->
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
+            <div>
+              <div style="font-weight:700;font-size:1rem;color:#fff;">🏡 ${HOUSE_NAMES[req.houseId] || req.houseName}</div>
+              <div style="font-size:0.78rem;color:rgba(255,255,255,0.45);margin-top:2px;">Solicitud recibida: ${dtStr}</div>
+            </div>
+            <span style="background:${st.bg};color:${st.color};border-radius:999px;padding:4px 12px;font-size:0.78rem;font-weight:700;white-space:nowrap;">${st.label}</span>
+          </div>
+          <!-- Data -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;font-size:0.85rem;">
+            <div><span style="color:rgba(255,255,255,0.45);display:block;font-size:0.72rem;margin-bottom:2px;">NOMBRE</span><strong style="color:#fff;">${req.firstName || ""} ${req.lastName || ""}</strong></div>
+            <div><span style="color:rgba(255,255,255,0.45);display:block;font-size:0.72rem;margin-bottom:2px;">PERSONAS</span><strong style="color:#fff;">${req.persons} (${req.adults} adultos, ${req.children} niños)</strong></div>
+            <div><span style="color:rgba(255,255,255,0.45);display:block;font-size:0.72rem;margin-bottom:2px;">CHECK-IN</span><strong style="color:#fff;">${req.checkIn}</strong></div>
+            <div><span style="color:rgba(255,255,255,0.45);display:block;font-size:0.72rem;margin-bottom:2px;">CHECK-OUT</span><strong style="color:#fff;">${req.checkOut}</strong></div>
+            <div><span style="color:rgba(255,255,255,0.45);display:block;font-size:0.72rem;margin-bottom:2px;">NOCHES</span><strong style="color:#fff;">${nights}</strong></div>
+            <div><span style="color:rgba(255,255,255,0.45);display:block;font-size:0.72rem;margin-bottom:2px;">TOTAL ESTIMADO</span><strong style="color:#a3e635;font-size:1rem;">$${total}</strong></div>
+          </div>
+          ${actionBtns}
+        </div>`;
+    }).join("");
+  }
+
+  window.acceptSolicitud = function(requestId) {
+    if (!confirm("¿Aceptar esta solicitud? Las fechas quedarán bloqueadas en el calendario.")) return;
+    StorageManager.acceptRequest(requestId);
+    renderSolicitudes();
+    updateSolicitudesBadge();
+    showAdminToast("✅ Solicitud aceptada. Fechas bloqueadas.", "success");
+  };
+
+  window.rejectSolicitud = function(requestId) {
+    if (!confirm("¿Rechazar esta solicitud? Las fechas seguirán disponibles.")) return;
+    StorageManager.rejectRequest(requestId);
+    renderSolicitudes();
+    updateSolicitudesBadge();
+    showAdminToast("❌ Solicitud rechazada.", "error");
+  };
+
+  window.deleteSolicitud = function(requestId) {
+    StorageManager.deleteRequest(requestId);
+    renderSolicitudes();
+    updateSolicitudesBadge();
+    showAdminToast("Solicitud eliminada del historial.", "info");
   };
 
   // ── Init ───────────────────────────────────────────────

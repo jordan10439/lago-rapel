@@ -19,7 +19,49 @@ const StorageManager = {
 
   remove(key) { localStorage.removeItem(this.PREFIX + key); },
 
-  // ── Reservas ─────────────────────────────────────────────
+  // ── Solicitudes de reserva (PENDIENTES – no bloquean fechas) ──
+  // status: "pending" | "accepted" | "rejected"
+  getAllRequests()  { return this.get("requests", []); },
+  addRequest(request) {
+    const list = this.getAllRequests();
+    request.id        = Date.now();
+    request.createdAt = new Date().toISOString();
+    request.status    = "pending";
+    list.push(request);
+    this.set("requests", list);
+    return request;
+  },
+  acceptRequest(requestId) {
+    const list = this.getAllRequests();
+    const req  = list.find(r => r.id === requestId);
+    if (!req) return;
+    req.status     = "accepted";
+    req.acceptedAt = new Date().toISOString();
+    this.set("requests", list);
+    // Ahora sí bloquear las fechas
+    this.addBlockedRange(req.houseId, {
+      start:     req.checkIn,
+      end:       req.checkOut,
+      reason:    `Reserva: ${req.guestName}`,
+      requestId: requestId
+    });
+  },
+  rejectRequest(requestId) {
+    const list = this.getAllRequests();
+    const req  = list.find(r => r.id === requestId);
+    if (!req) return;
+    req.status     = "rejected";
+    req.rejectedAt = new Date().toISOString();
+    this.set("requests", list);
+    // Las fechas siguen disponibles (no se bloquean)
+  },
+  deleteRequest(requestId) {
+    const list = this.getAllRequests().filter(r => r.id !== requestId);
+    this.set("requests", list);
+  },
+
+  // ── Reservas confirmadas (historial) ──────────────────────
+  // Ya no se usan para bloquear fechas – solo para historial
   getReservations(houseId)   { return this.get(`reservations_${houseId}`, []); },
   addReservation(houseId, reservation) {
     const list = this.getReservations(houseId);
@@ -34,7 +76,7 @@ const StorageManager = {
     this.set(`reservations_${houseId}`, list);
   },
 
-  // ── Fechas bloqueadas ────────────────────────────────────
+  // ── Fechas bloqueadas (solo se agregan al ACEPTAR solicitud) ──
   getBlockedDates(houseId)   { return this.get(`blocked_${houseId}`, []); },
   addBlockedRange(houseId, range) {
     const list = this.getBlockedDates(houseId);
@@ -52,7 +94,6 @@ const StorageManager = {
   setSemanaSanta(list) { this.set("semanaSanta", list); },
 
   // ── Season overrides (ajustes manuales de admin) ─────────
-  // type: "high" | "low" | null (eliminar override)
   getSeasonOverrides()         { return this.get("seasonOverrides", {}); },
   setSeasonOverride(dateStr, type) {
     const overrides = this.getSeasonOverrides();
@@ -84,19 +125,15 @@ const StorageManager = {
   clearAdminSession() { this.remove("adminSession"); },
 
   // ── ¿Está ocupada esta fecha? ────────────────────────────
+  // Solo considera fechas BLOQUEADAS (solicitudes aceptadas)
+  // Las solicitudes pendientes NO bloquean fechas
   isDateOccupied(houseId, dateStr) {
     const d = new Date(dateStr + "T12:00:00");
-
-    for (const r of this.getReservations(houseId)) {
-      const s = new Date(r.checkIn  + "T12:00:00");
-      const e = new Date(r.checkOut + "T12:00:00");
-      if (d >= s && d < e) return { type: "reserved", label: r.guestName || "Reservado" };
-    }
 
     for (const b of this.getBlockedDates(houseId)) {
       const s = new Date(b.start + "T12:00:00");
       const e = new Date(b.end   + "T12:00:00");
-      if (d >= s && d <= e) return { type: "blocked", label: b.reason || "Bloqueado" };
+      if (d >= s && d < e) return { type: "blocked", label: b.reason || "Reservado" };
     }
 
     return null;
