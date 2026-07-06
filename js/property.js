@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ── Galería de fotos ─────────────────────────────────────
   const galleryEl = document.getElementById("photoGallery");
 
-  // Fotos estáticas por casa (archivos en el servidor)
+  // Fotos estáticas por propiedad (archivos en el servidor)
   const STATIC_GALLERY = {
     1: [
       "assets/img/gallery/casa1/foto1_piscina.jpg",
@@ -59,15 +59,14 @@ document.addEventListener("DOMContentLoaded", () => {
       "assets/img/gallery/casa1/foto4_lago.jpg",
       "assets/img/gallery/casa1/foto5_interior.jpg"
     ],
-    2: [] // Casa 2 aún sin fotos reales – se agregan desde Admin
+    2: [], // Cabaña 1 – subir fotos desde Admin
+    3: []  // Cabaña 2 – subir fotos desde Admin
   };
 
   if (galleryEl) loadGallery();
 
   function loadGallery() {
-    // Fotos estáticas del servidor
     const staticPhotos = (STATIC_GALLERY[houseId] || []).map(src => ({ data: src, static: true }));
-    // Fotos subidas por admin (base64 en localStorage)
     const adminPhotos  = StorageManager.getGallery(houseId);
     const allPhotos    = [...staticPhotos, ...adminPhotos];
 

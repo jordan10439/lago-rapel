@@ -4,19 +4,22 @@
 
 const CONFIG = {
 
-  // ── Datos de las casas ──────────────────────────────────
+  // ── Datos de las propiedades ─────────────────────────────
   houses: {
     1: {
       id: 1,
-      name: "Santa Eliana 294",
+      name: "Casa 1",
+      displayName: "Santa Eliana 294",
+      type: "casa",
       slug: "casa1",
+      pageUrl: "casa1.html",
       address: "Santa Eliana 294, Llallauquén, Lago Rapel",
-      mapUrl: "https://maps.google.com/maps?q=https://maps.app.goo.gl/ZRKbMKAkWGutcPvq6&output=embed&z=16",
-      img: "assets/img/casa1_exterior.png",
-      description: "Acogedora casa en madera y piedra nativa, ubicada en Santa Eliana 294, Llallauquén. Propiedad independiente con terreno propio, 2 baños completos, piscina privada y acceso directo al Lago Rapel. Rodeada de vegetación nativa y amplio jardín.",
+      mapsLink: "https://maps.app.goo.gl/ZRKbMKAkWGutcPvq6",
+      img: "assets/img/gallery/casa1/foto1_piscina.jpg",
+      description: "Acogedora casa ubicada en Santa Eliana 294, Llallauquén. Casa individual, no compartida, con terreno propio, 2 baños, piscina privada y acceso directo al Lago Rapel. Amplio jardín y espacios para disfrutar en familia.",
       amenities: [
         { icon: "🛏️", text: "Dormitorios cómodos" },
-        { icon: "🚿", text: "2 Baños completos" },
+        { icon: "🚿", text: "2 baños" },
         { icon: "🍳", text: "Cocina equipada" },
         { icon: "🏊", text: "Piscina privada" },
         { icon: "🌊", text: "Acceso al lago" },
@@ -24,28 +27,55 @@ const CONFIG = {
         { icon: "📶", text: "WiFi" },
         { icon: "🌿", text: "Jardín amplio" },
         { icon: "🅿️", text: "Estacionamiento" },
-        { icon: "🏡", text: "Terreno independiente" }
+        { icon: "🏡", text: "Casa individual, no compartida" }
       ]
     },
     2: {
       id: 2,
-      name: "Santa Eliana 353",
-      slug: "casa2",
+      name: "Cabaña 1",
+      displayName: "Santa Eliana 353 – Cabaña 1",
+      type: "cabana",
+      slug: "cabana1",
+      pageUrl: "cabana1.html",
       address: "Santa Eliana 353, Llallauquén, Lago Rapel",
-      mapUrl: "https://maps.google.com/maps?q=https://maps.app.goo.gl/AcaYcqvj52dAUehs5&output=embed&z=16",
+      mapsLink: "https://maps.app.goo.gl/AcaYcqvj52dAUehs5",
       img: "assets/img/casa2_exterior.png",
-      description: "Casa nueva y totalmente renovada, ubicada en Santa Eliana 353, Llallauquén. El terreno alberga 2 casas independientes que funcionan como cabañas: cada una tiene su propio quincho, espacios privados y acceso independiente. Solo se comparte la piscina y algunos espacios comunes del terreno. El lago Rapel está directamente al frente. Ideal para grupos o familias que buscan privacidad con todo el confort.",
+      description: "Cabaña independiente ubicada en Santa Eliana 353, frente al lago. Forma parte de un terreno con dos cabañas independientes. Cada cabaña cuenta con su propio quincho y espacios privados. Solo se comparte la piscina, patios y algunos espacios comunes. Totalmente renovada este año, hecha nuevamente y con todo nuevo.",
       amenities: [
         { icon: "🛏️", text: "Dormitorios cómodos" },
-        { icon: "🚿", text: "1 Baño completo" },
+        { icon: "🚿", text: "1 Baño" },
         { icon: "🍳", text: "Cocina equipada" },
-        { icon: "🏐", text: "Piscina compartida del terreno" },
+        { icon: "🏊", text: "Piscina compartida (terreno)" },
         { icon: "🌊", text: "Lago al frente" },
         { icon: "🔥", text: "Quincho propio privado" },
-        { icon: "🏡", text: "2 cabañas independientes en el terreno" },
         { icon: "📶", text: "WiFi" },
-        { icon: "🌿", text: "Espacios comunes del terreno" },
-        { icon: "🅿️", text: "Estacionamiento" }
+        { icon: "🌿", text: "Patios y espacios comunes" },
+        { icon: "🅿️", text: "Estacionamiento" },
+        { icon: "🏡", text: "Cabaña independiente, totalmente renovada" }
+      ]
+    },
+    3: {
+      id: 3,
+      name: "Cabaña 2",
+      displayName: "Santa Eliana 353 – Cabaña 2",
+      type: "cabana",
+      slug: "cabana2",
+      pageUrl: "cabana2.html",
+      address: "Santa Eliana 353, Llallauquén, Lago Rapel",
+      mapsLink: "https://maps.app.goo.gl/AcaYcqvj52dAUehs5",
+      img: "assets/img/casa2_exterior.png",
+      description: "Cabaña independiente ubicada en Santa Eliana 353, frente al lago. Forma parte de un terreno con dos cabañas independientes. Cada cabaña cuenta con su propio quincho y espacios privados. Solo se comparte la piscina, patios y algunos espacios comunes. Totalmente renovada este año, hecha nuevamente y con todo nuevo.",
+      amenities: [
+        { icon: "🛏️", text: "Dormitorios cómodos" },
+        { icon: "🚿", text: "1 Baño" },
+        { icon: "🍳", text: "Cocina equipada" },
+        { icon: "🏊", text: "Piscina compartida (terreno)" },
+        { icon: "🌊", text: "Lago al frente" },
+        { icon: "🔥", text: "Quincho propio privado" },
+        { icon: "📶", text: "WiFi" },
+        { icon: "🌿", text: "Patios y espacios comunes" },
+        { icon: "🅿️", text: "Estacionamiento" },
+        { icon: "🏡", text: "Cabaña independiente, totalmente renovada" }
       ]
     }
   },
@@ -101,17 +131,16 @@ const CONFIG = {
         Por eso, adultos y niños se contabilizan por igual.`
     },
     {
-      q: "¿Las dos casas son en el mismo terreno?",
-      a: `<strong>No.</strong> Las dos casas son propiedades <strong>completamente independientes</strong>, con terrenos separados, distintas direcciones y accesos propios:<br><br>
+      q: "¿La Casa 1 y las Cabañas son el mismo terreno?",
+      a: `<strong>No.</strong> Son propiedades <strong>completamente separadas</strong>:<br><br>
         <ul>
-          <li>🏠 <strong>Santa Eliana 294:</strong> con acceso al lago y piscina propia</li>
-          <li>🏡 <strong>Santa Eliana 353:</strong> con el lago al frente y piscina propia</li>
-        </ul>
-        Cada casa tiene su propio terreno, su propia piscina y su propio acceso. No comparten ningún espacio en común.`
+          <li>🏠 <strong>Casa 1 – Santa Eliana 294:</strong> casa individual, terreno propio, piscina privada, acceso al lago. No comparte nada con nadie.</li>
+          <li>🏡 <strong>Cabaña 1 y Cabaña 2 – Santa Eliana 353:</strong> dos cabañas independientes dentro del mismo terreno, frente al lago. Comparten piscina y patios entre sí, pero cada cabaña tiene quincho propio y espacios privados.</li>
+        </ul>`
     },
     {
-      q: "¿Cuántas personas puede alojar cada casa?",
-      a: `Cada casa tiene un <strong>máximo de 8 personas</strong> incluidas en el precio base.<br><br>
+      q: "¿Cuántas personas puede alojar cada propiedad?",
+      a: `Cada propiedad tiene un <strong>máximo de 8 personas</strong> incluidas en el precio base.<br><br>
         Si el grupo supera las 8 personas, se cobra un cargo adicional por cada persona extra:
         <ul>
           <li>🔴 <strong>Temporada Alta:</strong> +$10.000 por persona extra por noche</li>
@@ -134,8 +163,8 @@ const CONFIG = {
       q: "¿Cómo funciona la reserva?",
       a: `El proceso es simple:
         <ol>
-          <li>Selecciona la casa que te interesa</li>
-          <li>Elige tus fechas en el calendario (colores: 🔴 rojo = temporada alta, 🟢 verde = temporada baja)</li>
+          <li>Selecciona la propiedad que te interesa</li>
+          <li>Elige tus fechas en el calendario (🔴 rojo = temporada alta, 🟢 verde = temporada baja)</li>
           <li>Ingresa nombre, apellido y cantidad de personas</li>
           <li>Revisa el precio total calculado automáticamente</li>
           <li>Presiona <strong>"Confirmar Reserva"</strong> para enviar la solicitud por WhatsApp</li>
